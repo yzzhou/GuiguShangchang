@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="myapplication.guigushangchang">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -10,17 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".app.WelcomeActivity">
-            <!--android:theme="@style/AppThemes">-->
+
+            <!-- android:theme="@style/AppThemes"> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.activity.MainActivity"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
+        <activity
+            android:name=".home.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"/>
+        <activity android:name=".app.GoodsInfoActivity"></activity>
     </application>
 
 </manifest>

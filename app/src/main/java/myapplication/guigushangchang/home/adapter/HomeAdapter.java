@@ -1,6 +1,7 @@
 package myapplication.guigushangchang.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
 import myapplication.guigushangchang.R;
+import myapplication.guigushangchang.app.GoodsInfoActivity;
+import myapplication.guigushangchang.home.bean.GoodsBean;
 import myapplication.guigushangchang.home.bean.HomeBean;
 import myapplication.guigushangchang.home.utils.GlideImageLoader;
 import myapplication.guigushangchang.utils.Constants;
@@ -62,6 +65,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
      * 热卖
      */
     public static final int HOT = 5;
+
+
+    public static final  String GOODS_BEAN= "goods_bean";
+    public static final String FIGURE = "figure";
+    public static final String WEBVIEW_BEAN = "webview_bean";
+
     private final HomeBean.ResultBean resultBean;
 
     /**
@@ -70,8 +79,9 @@ public class HomeAdapter extends RecyclerView.Adapter {
     public int currentType = BANNER;
 
     private Context mContext;
-    private LayoutInflater inflater;
+    LayoutInflater inflater;
     private HomeBean.ResultBean.SeckillInfoBean seckill_info;
+    //public static String GOODS_BEAN= "goods_bean";
 
 
     public HomeAdapter(Context mContext, HomeBean.ResultBean resultBean) {
@@ -269,11 +279,11 @@ public class HomeAdapter extends RecyclerView.Adapter {
             this.mContext = mContext;
         }
         private long dt;
-        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info) {
+        public void setData(final  HomeBean.ResultBean.SeckillInfoBean seckill_info) {
             //设置RecyclerView
-
-            dt =   Integer.valueOf(seckill_info.getEnd_time()) - Integer.valueOf(seckill_info.getStart_time());
-            countdownView.start(dt);
+            this.seckillInfo = seckill_info;
+//            dt =   Integer.valueOf(seckill_info.getEnd_time()) - Integer.valueOf(seckill_info.getStart_time());
+//            countdownView.start(dt);
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
              adapter = new SeckillRecyclerViewAdapter(mContext,seckill_info);
             recyclerView.setAdapter(adapter);
@@ -281,9 +291,11 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onItemClick(int position) {
                     Toast.makeText(mContext, "position"+position, Toast.LENGTH_SHORT).show();
+
+
                 }
             });
-            this.seckillInfo = seckill_info;
+
             if (!isFrist) {
                 isFrist = true;
                 //计算倒计时持续的时间
@@ -336,10 +348,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
+        public void setData(final List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
 
             adapter = new RecommendGridViewAdapter(mContext, recommend_info);
             gvRecommend.setAdapter(adapter);
+            gvRecommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext, ""+recommend_info.get(position).getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -349,22 +367,31 @@ public class HomeAdapter extends RecyclerView.Adapter {
         TextView tvMoreHot;
         @BindView(R.id.gv_hot)
         GridView gvHot;
-        HotGridViewAdapter adapter;
+        //HotGridViewAdapter adapter;
         public HotViewHolder(Context mContext, View itemView) {
             super(itemView);
             this.mContext = mContext;
             ButterKnife.bind(this,itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
-            adapter = new HotGridViewAdapter(mContext,hot_info);
+        public void setData(final List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+            HotGridViewAdapter adapter = new HotGridViewAdapter(mContext,hot_info);
             gvHot.setAdapter(adapter);
 
             //设置item的点击事件
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.HotInfoBean hotInfoBean = hot_info.get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setProduct_id(hotInfoBean.getProduct_id());
+                    goodsBean.setCover_price(hotInfoBean.getCover_price());
+                    goodsBean.setFigure(hotInfoBean.getFigure());
+                    goodsBean.setName(hotInfoBean.getName());
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
                 }
             });
 
