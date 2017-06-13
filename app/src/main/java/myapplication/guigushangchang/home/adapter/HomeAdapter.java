@@ -188,7 +188,34 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     .setOnBannerListener(new OnBannerListener() {
                         @Override
                         public void OnBannerClick(int position) {
-                            Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                            if(position < banner_info.size()){
+                                String product_id = "";
+                                String name = "";
+                                String cover_price = "";
+                                if (position == 0) {
+                                    product_id = "627";
+                                    cover_price = "32.00";
+                                    name = "剑三T恤批发";
+                                } else if (position == 1) {
+                                    product_id = "21";
+                                    cover_price = "8.00";
+                                    name = "同人原创】剑网3 剑侠情缘叁 Q版成男 口袋胸针";
+                                } else {
+                                    product_id = "1341";
+                                    cover_price = "50.00";
+                                    name = "【蓝诺】《天下吾双》 剑网3同人本";
+                                }
+                                String image = banner_info.get(position).getImage();
+                                GoodsBean goodsBean = new GoodsBean();
+                                goodsBean.setName(name);
+                                goodsBean.setCover_price(cover_price);
+                                goodsBean.setFigure(image);
+                                goodsBean.setProduct_id(product_id);
+                                Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                                intent.putExtra(GOODS_BEAN, goodsBean);
+                                mContext.startActivity(intent);
+                            }
                         }
                     })
                     .start();
@@ -243,6 +270,15 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 public void onItemClick(int position) {
                     HomeBean.ResultBean.ActInfoBean actInfoBean = act_info.get(position);
                     Toast.makeText(mContext, ""+actInfoBean.getName(), Toast.LENGTH_SHORT).show();
+//                    HomeBean.ResultBean.ActInfoBean actInfoBean1 = act_info.get(position);
+//                    GoodsBean goodsBean = new GoodsBean();
+//                    goodsBean.setProduct_id(actInfoBean1.getProduct_id());
+//                    goodsBean.setCover_price(actInfoBean1.getCover_price());
+//                    goodsBean.setFigure(actInfoBean1.getFigure());
+//                    goodsBean.setName(actInfoBean1.getName());
+//                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+//                    intent.putExtra(GOODS_BEAN,goodsBean);
+//                    mContext.startActivity(intent);
                 }
             });
         }
@@ -290,8 +326,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnSeckillRecyclerView(new SeckillRecyclerViewAdapter.OnSeckillRecyclerView() {
                 @Override
                 public void onItemClick(int position) {
-                    Toast.makeText(mContext, "position"+position, Toast.LENGTH_SHORT).show();
-
+                   // Toast.makeText(mContext, "position"+position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.SeckillInfoBean.ListBean seckillInfoBean = seckill_info.getList().get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setProduct_id(seckillInfoBean.getProduct_id());
+                    goodsBean.setCover_price(seckillInfoBean.getCover_price());
+                    goodsBean.setFigure(seckillInfoBean.getFigure());
+                    goodsBean.setName(seckillInfoBean.getName());
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
 
                 }
             });
@@ -355,7 +399,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
             gvRecommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, ""+recommend_info.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, ""+recommend_info.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.RecommendInfoBean recommendInfoBean = recommend_info.get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setProduct_id(recommendInfoBean.getProduct_id());
+                    goodsBean.setCover_price(recommendInfoBean.getCover_price());
+                    goodsBean.setFigure(recommendInfoBean.getFigure());
+                    goodsBean.setName(recommendInfoBean.getName());
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
                 }
             });
         }
