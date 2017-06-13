@@ -54,6 +54,7 @@ public class HomeFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         //设置点击事件
         return view;
+
     }
 
     @OnClick({R.id.tv_search_home, R.id.tv_message_home, ib_top})
@@ -67,7 +68,18 @@ public class HomeFragment extends BaseFragment {
                 break;
             case ib_top:
                 //回到顶部
-                rvHome.scrollToPosition(0);
+                ibTop.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rvHome.scrollToPosition(0);
+                    }
+                });
+//                ib_top.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        rvHome.scrollToPosition(0);
+//                    }
+//                });
                 break;
         }
     }
@@ -147,6 +159,7 @@ public class HomeFragment extends BaseFragment {
         }
 
     }
+
     private void processData(String json) {
         if (!TextUtils.isEmpty(json)) {
 

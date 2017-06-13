@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 
 import myapplication.guigushangchang.R;
-import myapplication.guigushangchang.activity.MainActivity;
+import myapplication.guigushangchang.home.activity.MainActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
     private Handler handler = new Handler();
