@@ -1,5 +1,6 @@
 package myapplication.guigushangchang.app;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import myapplication.guigushangchang.R;
+import myapplication.guigushangchang.home.activity.MainActivity;
 import myapplication.guigushangchang.home.adapter.HomeAdapter;
 import myapplication.guigushangchang.home.bean.GoodsBean;
 import myapplication.guigushangchang.home.bean.HomeBean;
+import myapplication.guigushangchang.shoppingcart.utils.CartStorage;
 import myapplication.guigushangchang.utils.Constants;
 import okhttp3.Call;
 
@@ -254,7 +257,16 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.ib_good_info_more:
-                Toast.makeText(this, "更多", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "更多", Toast.LENGTH_SHORT).show();
+                if (llRoot.getVisibility() == View.VISIBLE) {
+                    llRoot.setVisibility(View.GONE);
+                } else {
+                    llRoot.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.btn_more:
+                //隐藏
+                llRoot.setVisibility(View.GONE);
                 break;
             case R.id.tv_good_info_callcenter:
                 Toast.makeText(this, "呼叫中心", Toast.LENGTH_SHORT).show();
@@ -263,10 +275,16 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_good_info_cart:
-                Toast.makeText(this, "进入购物车", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "进入购物车", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(this, ShoppingCartFragment.class);
+//                startActivity(intent);
+                Intent intent = new Intent(GoodsInfoActivity.this,MainActivity.class);
+                intent.putExtra("checkId",R.id. rb_cart);
+                startActivity(intent);
                 break;
             case R.id.btn_good_info_addcart:
-                Toast.makeText(this, "添加到购物车", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "已添加到购物车", Toast.LENGTH_SHORT).show();
+                CartStorage.getInstance(GoodsInfoActivity.this).addData(goodsBean);
                 break;
             case R.id.tv_more_share:
                 Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
@@ -277,11 +295,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
             case R.id.tv_more_home:
                 Toast.makeText(this, "主页", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.btn_more:
-                //                Toast.makeText(GoodsInfoActivity.this, "退出", Toast.LENGTH_SHORT).show();
-                llRoot.setVisibility(View.GONE);
 
-                break;
         }
     }
 }

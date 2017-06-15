@@ -23,10 +23,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 startMainActivity();
             }
         },2000);
+
     }
 
     private void startMainActivity() {
         startActivity(new Intent(WelcomeActivity.this,MainActivity.class));
+        //startActivity(new Intent(WelcomeActivity.this, myapplication.guigushangchang.app.MainActivity.class));
         //关闭当前页面
         finish();
     }

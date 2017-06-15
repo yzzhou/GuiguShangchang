@@ -17,11 +17,15 @@ public class Constants {
      * 图片的基本路径
      */
     public static String BASE_URL_IMAGE  = BASE_URL+"/img";
+    //public static final String TAG_URL = BASE_URL_JSON + "TAG_URL.json";
 
+    //小裙子
 
+    //上衣
 
     //小裙子
     public static final String SKIRT_URL = BASE_URL_JSON + "SKIRT_URL.json";
+
     //上衣
     public static final String JACKET_URL = BASE_URL_JSON + "JACKET_URL.json";
     //下装(裤子)

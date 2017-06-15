@@ -26,8 +26,10 @@ import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
 import myapplication.guigushangchang.R;
 import myapplication.guigushangchang.app.GoodsInfoActivity;
+import myapplication.guigushangchang.app.WebViewActivity;
 import myapplication.guigushangchang.home.bean.GoodsBean;
 import myapplication.guigushangchang.home.bean.HomeBean;
+import myapplication.guigushangchang.home.bean.WebViewBean;
 import myapplication.guigushangchang.home.utils.GlideImageLoader;
 import myapplication.guigushangchang.utils.Constants;
 
@@ -71,16 +73,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
     public static final String FIGURE = "figure";
     public static final String WEBVIEW_BEAN = "webview_bean";
 
-    private final HomeBean.ResultBean resultBean;
+    public final HomeBean.ResultBean resultBean;
 
     /**
      * 当前类型
      */
     public int currentType = BANNER;
 
-    private Context mContext;
-    LayoutInflater inflater;
-    private HomeBean.ResultBean.SeckillInfoBean seckill_info;
+    private final Context mContext;
+    private  LayoutInflater inflater;
+    //private HomeBean.ResultBean.SeckillInfoBean seckill_info;
     //public static String GOODS_BEAN= "goods_bean";
 
 
@@ -243,6 +245,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     HomeBean.ResultBean.ChannelInfoBean channelInfoBean = channel_info.get(position);
                     Toast.makeText(mContext, ""+channelInfoBean.getChannel_name(), Toast.LENGTH_SHORT).show();
+
                 }
             });
         }
@@ -269,26 +272,36 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onItemClick(int position) {
                     HomeBean.ResultBean.ActInfoBean actInfoBean = act_info.get(position);
-                    Toast.makeText(mContext, ""+actInfoBean.getName(), Toast.LENGTH_SHORT).show();
-//                    HomeBean.ResultBean.ActInfoBean actInfoBean1 = act_info.get(position);
-//                    GoodsBean goodsBean = new GoodsBean();
-//                    goodsBean.setProduct_id(actInfoBean1.getProduct_id());
-//                    goodsBean.setCover_price(actInfoBean1.getCover_price());
-//                    goodsBean.setFigure(actInfoBean1.getFigure());
-//                    goodsBean.setName(actInfoBean1.getName());
-//                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
-//                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    //Toast.makeText(mContext, ""+actInfoBean.getName(), Toast.LENGTH_SHORT).show();
+//                    HomeBean.ResultBean.ActInfoBean actInfoBean = act_info.get(position);
+
+                    WebViewBean webViewBean = new WebViewBean();
+                    webViewBean.setName(actInfoBean.getName());
+                    webViewBean.setIcon_url(actInfoBean.getIcon_url());
+                    webViewBean.setUrl(Constants.BASE_URL_IMAGE+actInfoBean.getUrl());
+                    Intent intent = new Intent(mContext, WebViewActivity.class);
+                    intent.putExtra(WEBVIEW_BEAN,webViewBean);
+                    mContext.startActivity(intent);
+
+//                    WebViewBean webViewBean = new WebViewBean();
+//                    webViewBean.setName(actInfoBean.getName());
+//                    webViewBean.setIcon_url(actInfoBean.getIcon_url());
+//                    webViewBean.setUrl(actInfoBean.getUrl());
+//
+//                    Intent intent = new Intent(mContext, WebViewActivity.class);
+//                    intent.putExtra(WEBVIEW_BEAN,webViewBean);
 //                    mContext.startActivity(intent);
+
                 }
             });
         }
     }
     private boolean isFrist = false;
     class SeckillViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvMore;
-        private RecyclerView recyclerView;
-        public Context mContext;
-        private CountdownView countdownView;
+        //private TextView tvMore;
+        //private RecyclerView recyclerView;
+        private Context mContext;
+        //private CountdownView countdownView;
         @BindView(R.id.countdownview)
         CountdownView countdownview;
         @BindView(R.id.tv_more_seckill)
@@ -296,33 +309,29 @@ public class HomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.rv_seckill)
         RecyclerView rvSeckill;
 
-        SeckillRecyclerViewAdapter adapter;
-
         Handler mHandler = new Handler();
         HomeBean.ResultBean.SeckillInfoBean seckillInfo;
 
         /**
          * 开始刷新
          */
-
-
         public SeckillViewHolder(Context mContext,View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            tvMore = (TextView) itemView.findViewById(R.id.tv_more_seckill);
-            recyclerView = (RecyclerView) itemView.findViewById(R.id.rv_seckill);
-            countdownView = (CountdownView) itemView.findViewById(R.id.countdownview);
+//            tvMore = (TextView) itemView.findViewById(R.id.tv_more_seckill);
+//            recyclerView = (RecyclerView) itemView.findViewById(R.id.rv_seckill);
+//            countdownView = (CountdownView) itemView.findViewById(R.id.countdownview);
             this.mContext = mContext;
         }
-        private long dt;
+
         public void setData(final  HomeBean.ResultBean.SeckillInfoBean seckill_info) {
             //设置RecyclerView
             this.seckillInfo = seckill_info;
-//            dt =   Integer.valueOf(seckill_info.getEnd_time()) - Integer.valueOf(seckill_info.getStart_time());
-//            countdownView.start(dt);
-            recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-             adapter = new SeckillRecyclerViewAdapter(mContext,seckill_info);
-            recyclerView.setAdapter(adapter);
+//
+            rvSeckill.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            SeckillRecyclerViewAdapter adapter = new SeckillRecyclerViewAdapter(mContext,seckill_info);
+            rvSeckill.setAdapter(adapter);
+
             adapter.setOnSeckillRecyclerView(new SeckillRecyclerViewAdapter.OnSeckillRecyclerView() {
                 @Override
                 public void onItemClick(int position) {
