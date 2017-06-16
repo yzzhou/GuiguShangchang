@@ -1,5 +1,6 @@
 package myapplication.guigushangchang.type.fragment;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import myapplication.guigushangchang.R;
 import myapplication.guigushangchang.base.BaseFragment;
 import myapplication.guigushangchang.type.adapter.TypeLeftAdapter;
+import myapplication.guigushangchang.type.adapter.TypeRightAdapter;
 import myapplication.guigushangchang.type.bean.TypeBean;
 import myapplication.guigushangchang.utils.Constants;
 import okhttp3.Call;
@@ -31,13 +33,15 @@ public class ListFragment extends BaseFragment {
     private String[] urls = new String[]{Constants.SKIRT_URL, Constants.JACKET_URL, Constants.PANTS_URL, Constants.OVERCOAT_URL,
             Constants.ACCESSORY_URL, Constants.BAG_URL, Constants.DRESS_UP_URL, Constants.HOME_PRODUCTS_URL, Constants.STATIONERY_URL,
             Constants.DIGIT_URL, Constants.GAME_URL};
-
+    private String[] titles = new String[]{"小裙子", "上衣", "下装", "外套", "配件", "包包", "装扮", "居家宅品",
+            "办公文具", "数码周边", "游戏专区"};
     @BindView(R.id.lv_left)
     ListView lvLeft;
     @BindView(R.id.rv_right)
     RecyclerView rlRight;
     public TypeLeftAdapter leftAdapter;
     public List<TypeBean.ResultBean> result;
+    private TypeRightAdapter typeRightAdapter;
 
     @Override
     public View initView() {
@@ -76,7 +80,7 @@ public class ListFragment extends BaseFragment {
                         Log.e(TAG, "请求成功==" + response);
                         if (response != null) {
                             if(isFirst){
-                                leftAdapter = new TypeLeftAdapter(mContext);
+                                leftAdapter = new TypeLeftAdapter(mContext,titles);
                                 lvLeft.setAdapter(leftAdapter);
                             }
                             //解析数据
@@ -92,11 +96,28 @@ public class ListFragment extends BaseFragment {
         TypeBean typeBean = JSON.parseObject(json,TypeBean.class);
         result = typeBean.getResult();
         Log.e("TAG","解析成功=="+typeBean.getResult().get(0).getName());
+        if(result !=null &&result.size()>0){
+             typeRightAdapter = new TypeRightAdapter(mContext, result);
+            GridLayoutManager manager=new GridLayoutManager(mContext,3);
+            manager.setSpanSizeLookup(new  GridLayoutManager.SpanSizeLookup(){
+
+                @Override
+                public int getSpanSize(int position) {
+                    if(position==0){
+                        return  3;
+                    }else{
+                        return 1;
+                    }
+
+                }
+            });
+            rlRight.setLayoutManager(manager);
+        }
     }
 
 
     private boolean isFirst  =true;
-    private void initListener() {
+    public void initListener() {
         lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

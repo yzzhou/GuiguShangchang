@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import myapplication.guigushangchang.R;
 import myapplication.guigushangchang.base.BaseFragment;
+import myapplication.guigushangchang.home.activity.MainActivity;
 
 /**
  * Created by zhouzhou on 2017/6/12.
@@ -101,7 +102,7 @@ public class TypeFragment extends BaseFragment {
 
             if(currentFragment != null){
                 //开启事务
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 if(!currentFragment.isAdded()){
                     //隐藏之前显示的
                     if(tempFragment != null){

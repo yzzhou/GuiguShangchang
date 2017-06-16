@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import myapplication.guigushangchang.R;
+import myapplication.guigushangchang.app.MyApplication;
 import myapplication.guigushangchang.home.bean.GoodsBean;
 import myapplication.guigushangchang.shoppingcart.utils.AddSubView;
 import myapplication.guigushangchang.shoppingcart.utils.CartStorage;
@@ -44,6 +45,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         //显示总价格
         showTotalPrice();
+        checkAll();
 
     }
 
@@ -80,7 +82,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         //1.根据位置得到对应的数据
-        final GoodsBean goodsBean = datas.get(position);
+        final  GoodsBean goodsBean = datas.get(position);
         //2.绑定数据
         //根据Bean对象，校验是否真正的选中
         holder.cbGov.setChecked(goodsBean.isChecked());
@@ -97,13 +99,13 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         //设置增加和减少按钮的监听
         holder.addSubView.setOnNumberChangeListener(new AddSubView.OnNumberChangeListener() {
             @Override
-            public void numberChange(int value) {
+            public void numberChange(int number) {
                 //1.设置Bean对象中
-                goodsBean.setNumber(value);
+                goodsBean.setNumber(number);
                 //2.重新计算总价格
                 showTotalPrice();
                 //3.同步到内存和本地中
-                CartStorage.getInstance(mContext).updateData(goodsBean);
+                CartStorage.getInstance(MyApplication.getContext()).updateData(goodsBean);
 
             }
         });
@@ -112,7 +114,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return datas==null ? 0: datas.size();
     }
 
     public void checkAll() {
@@ -145,29 +147,29 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         }
 
 
-        if (datas != null && datas.size() > 0) {
-            //有数据
-            for (int i = 0; i < datas.size(); i++) {
-                GoodsBean goodsBean = datas.get(i);
-
-                //判断是否被选中
-                if (!goodsBean.isChecked()) {
-                    //不被选中的
-                    checkboxAll.setChecked(false);
-                    checkboxDeleteAll.setChecked(false);
-                    return;
-                }
-
-            }
-            //下面代码没有几乎支持
-            //全选
-            checkboxAll.setChecked(true);
-            checkboxDeleteAll.setChecked(true);
-        } else {
-            //没有数据-没有集合
-            checkboxAll.setChecked(false);
-            checkboxDeleteAll.setChecked(false);
-        }
+//        if (datas != null && datas.size() > 0) {
+//            //有数据
+//            for (int i = 0; i < datas.size(); i++) {
+//                GoodsBean goodsBean = datas.get(i);
+//
+//                //判断是否被选中
+//                if (!goodsBean.isChecked()) {
+//                    //不被选中的
+//                    checkboxAll.setChecked(false);
+//                    checkboxDeleteAll.setChecked(false);
+//                    return;
+//                }
+//
+//            }
+//            //下面代码没有几乎支持
+//            //全选
+//            checkboxAll.setChecked(true);
+//            checkboxDeleteAll.setChecked(true);
+//        } else {
+//            //没有数据-没有集合
+//            checkboxAll.setChecked(false);
+//            checkboxDeleteAll.setChecked(false);
+//        }
 
 
     }
@@ -180,12 +182,15 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     public void checkAll_none(boolean isChecked) {
         if (datas != null && datas.size() > 0) {
             //有数据
+            int number = 0;
             for (int i = 0; i < datas.size(); i++) {
                 GoodsBean goodsBean = datas.get(i);
                 goodsBean.setChecked(isChecked);
                 //刷新适配器了
                 notifyItemChanged(i);
             }
+        }else{
+            checkboxAll.setChecked(false);
         }
 
 
@@ -198,7 +203,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                GoodsBean goodsBean = datas.get(i);
                if(goodsBean.isChecked()){
                    //移除
-                   datas.remove(i);
+                   datas.remove(goodsBean);
                    //在本地也同步更新
                    CartStorage.getInstance(mContext).deleteData(goodsBean);
                    //刷新适配器
@@ -245,11 +250,23 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 @Override
                 public void onClick(View v) {
 
-                    if (clickListener != null) {//MyOnItemClickListener()
-                        //itemView
-                        //MyOnItemClickListener()
-                        clickListener.onItemClick(v, getLayoutPosition());
-                    }
+//                    if (clickListener != null) {//MyOnItemClickListener()
+//                        //itemView
+//                        //MyOnItemClickListener()
+//                        clickListener.onItemClick(v, getLayoutPosition());
+//                    }
+                    //状态取反
+                    GoodsBean goodsBean = datas.get(getLayoutPosition());
+                    goodsBean.setChecked(!goodsBean.isChecked());
+
+                    //刷新适配器
+                    notifyItemChanged(getLayoutPosition());
+
+
+                    //重新显示总价格
+                    showTotalPrice();
+                    //校验是否全选
+                    checkAll();
 
                 }
             });

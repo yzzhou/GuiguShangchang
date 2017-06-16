@@ -82,4 +82,5 @@ public class GoodsBean implements Serializable {
     }
 
 
+
 }

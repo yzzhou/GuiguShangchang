@@ -22,7 +22,6 @@ public class Constants {
     //小裙子
 
     //上衣
-
     //小裙子
     public static final String SKIRT_URL = BASE_URL_JSON + "SKIRT_URL.json";
 

@@ -19,7 +19,8 @@ import myapplication.guigushangchang.home.bean.GoodsBean;
 public class CartStorage {
     public static final String JSON_CART = "json_cart";
     private static  CartStorage cartStorage;
-    private final Context mContext;
+    private static Context mContext;
+
     private SparseArray<GoodsBean> sparseArray;
 
     private CartStorage(Context context) {
@@ -36,7 +37,7 @@ public class CartStorage {
         if(list != null  && list.size()  > 0){
             for (int i = 0 ;i < list.size(); i++){
                 GoodsBean goodsBean = list.get(i);
-                sparseArray.put(Integer.valueOf(goodsBean.getProduct_id()),goodsBean);
+                sparseArray.put(Integer.parseInt(goodsBean.getProduct_id()),goodsBean);
             }
         }
     }
@@ -71,7 +72,7 @@ public class CartStorage {
     public static CartStorage getInstance(Context context){
 
         if(cartStorage == null){
-
+            mContext = context;
             synchronized (CartStorage.class){
                 if(cartStorage == null){
                     cartStorage = new CartStorage(context);
@@ -154,8 +155,12 @@ public class CartStorage {
         }
         return list;
     }
+
+
 //    public GoodsBean findDete(String product_id) {
 //        GoodsBean goodsBean = sparseArray.get(Integer.parseInt(product_id));
 //        return goodsBean;
 //    }
+
+
 }
