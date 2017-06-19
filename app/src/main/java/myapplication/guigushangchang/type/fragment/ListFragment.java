@@ -43,6 +43,7 @@ public class ListFragment extends BaseFragment {
     public List<TypeBean.ResultBean> result;
     private TypeRightAdapter typeRightAdapter;
 
+
     @Override
     public View initView() {
         View view = View.inflate(mContext, R.layout.fragment_list, null);
@@ -53,7 +54,21 @@ public class ListFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
-        initListener();
+        leftAdapter = new TypeLeftAdapter(mContext,titles);
+        lvLeft.setAdapter(leftAdapter);
+        lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //1.设置点击的位置
+                leftAdapter.changeSelected(position);
+
+                //2.刷新适配器--getView
+                leftAdapter.notifyDataSetChanged();
+
+                //根据位置得到不同的url，联网请求
+                getDataFromNet(urls[position]);
+            }
+        });
         getDataFromNet(urls[0]);
     }
 
@@ -78,14 +93,7 @@ public class ListFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.e(TAG, "请求成功==" + response);
-                        if (response != null) {
-                            if(isFirst){
-                                leftAdapter = new TypeLeftAdapter(mContext,titles);
-                                lvLeft.setAdapter(leftAdapter);
-                            }
-                            //解析数据
-                            processData(response);
-                        }
+                        processData(response);
                     }
 
                 });
@@ -97,7 +105,8 @@ public class ListFragment extends BaseFragment {
         result = typeBean.getResult();
         Log.e("TAG","解析成功=="+typeBean.getResult().get(0).getName());
         if(result !=null &&result.size()>0){
-             typeRightAdapter = new TypeRightAdapter(mContext, result);
+            typeRightAdapter = new TypeRightAdapter(mContext, result);
+            rlRight.setAdapter(typeRightAdapter);
             GridLayoutManager manager=new GridLayoutManager(mContext,3);
             manager.setSpanSizeLookup(new  GridLayoutManager.SpanSizeLookup(){
 
@@ -112,33 +121,34 @@ public class ListFragment extends BaseFragment {
                 }
             });
             rlRight.setLayoutManager(manager);
+
         }
     }
 
-
-    private boolean isFirst  =true;
-    public void initListener() {
-        lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //1.设置点击的位置
-
-                leftAdapter.changeSelected(position);
-                //2.在TypeLeftAdapter getView根据位置中高亮显示代码
-
-
-                //3.刷新适配器
-                leftAdapter.notifyDataSetChanged();
-                getDataFromNet(urls[position]);
-                //只要点击的不是0，就不是第一次
-                if(position != 0){
-                    isFirst = false;
-                }
-
-            }
-        });
-    }
+//
+//    private boolean isFirst  =true;
+//    public void initListener() {
+//        lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //1.设置点击的位置
+//
+//                leftAdapter.changeSelected(position);
+//                //2.在TypeLeftAdapter getView根据位置中高亮显示代码
+//
+//
+//                //3.刷新适配器
+//                leftAdapter.notifyDataSetChanged();
+//                getDataFromNet(urls[position]);
+//                //只要点击的不是0，就不是第一次
+//                if(position != 0){
+//                    isFirst = false;
+//                }
+//
+//            }
+//        });
+//    }
 
 }
 

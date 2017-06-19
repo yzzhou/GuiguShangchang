@@ -114,7 +114,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
             Glide.with(GoodsInfoActivity.this).load(figure).into(ivGoodInfoImage);
         } else {
             //设置图片
-            Glide.with(GoodsInfoActivity.this).load(Constants.BASE_URL_IMAGE + figure).into(ivGoodInfoImage);
+            Glide.with(GoodsInfoActivity.this).load(Constants.BASE_URL_IMAGE + figure).placeholder(R.drawable.new_user_icon_background).error(R.drawable.new_user_icon_background).into(ivGoodInfoImage);
         }
 
         //设置名称
@@ -277,7 +277,8 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 llRoot.setVisibility(View.GONE);
                 break;
             case R.id.tv_good_info_callcenter:
-                Toast.makeText(this, "呼叫中心", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "呼叫中心", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(GoodsInfoActivity.this,CallCenterActivity.class));
                 break;
             case R.id.tv_good_info_collection:
                 Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();

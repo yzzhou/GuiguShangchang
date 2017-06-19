@@ -58,7 +58,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 1 + child.size();
+        return 1+child.size() ;
     }
 
     /**
@@ -136,11 +136,11 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
             Glide.with(mContext).load(Constants.BASE_URL_IMAGE+childBean.getPic()).into(ivOrdinaryRight);
             //设置文本
             tvOrdinaryRight.setText(childBean.getName());
-
+//
             llRoot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //Toast.makeText(mContext, "realPostion=="+realPosition, Toast.LENGTH_SHORT).show();
 
                     if(realPosition <=8){
                         Intent intent  = new Intent(mContext, GoodsListActivity.class);

@@ -95,7 +95,7 @@ public class CartStorage {
         }else {
             temp = goodsBean;
             //至少设置1个
-            temp.setNumber(1);
+            //temp.setNumber(1);
         }
 
         //添加

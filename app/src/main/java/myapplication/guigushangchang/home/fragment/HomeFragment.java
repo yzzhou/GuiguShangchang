@@ -1,5 +1,6 @@
 package myapplication.guigushangchang.home.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telecom.Call;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import myapplication.guigushangchang.base.BaseFragment;
 import myapplication.guigushangchang.home.adapter.HomeAdapter;
 import myapplication.guigushangchang.home.bean.HomeBean;
 import myapplication.guigushangchang.utils.Constants;
+import myapplication.guigushangchang.zxing.activity.CaptureActivity;
 import okhttp3.Request;
 
 import static myapplication.guigushangchang.R.id.ib_top;
@@ -35,8 +38,11 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.rv_home)
     RecyclerView rvHome;
 
+    @BindView(R.id.ll_main_scan)
+    LinearLayout llmainscan;
     @BindView(R.id.tv_search_home)
     TextView tvSearchHome;
+
 
     @BindView(R.id.tv_message_home)
     TextView tvMessageHome;
@@ -57,7 +63,7 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.tv_search_home, R.id.tv_message_home, ib_top})
+    @OnClick({R.id.tv_search_home, R.id.tv_message_home, R.id.ib_top,R.id.ll_main_scan})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search_home:
@@ -81,10 +87,18 @@ public class HomeFragment extends BaseFragment {
 //                    }
 //                });
                 break;
+            case R.id.ll_main_scan://打开扫描
+                Toast.makeText(mContext, "扫一扫", Toast.LENGTH_SHORT).show();
+                openScan();
+                break;
         }
     }
 
-
+    private void openScan() {
+//        config();
+        startActivityForResult(new Intent(getActivity(), CaptureActivity.class), 0);
+        //HomeFragemnt还是回调MainActivity---MainActivity
+    }
 
 
     @Override

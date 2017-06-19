@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -26,6 +25,7 @@ import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
 import myapplication.guigushangchang.R;
 import myapplication.guigushangchang.app.GoodsInfoActivity;
+import myapplication.guigushangchang.app.GoodsListActivity;
 import myapplication.guigushangchang.app.WebViewActivity;
 import myapplication.guigushangchang.home.bean.GoodsBean;
 import myapplication.guigushangchang.home.bean.HomeBean;
@@ -244,7 +244,10 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     HomeBean.ResultBean.ChannelInfoBean channelInfoBean = channel_info.get(position);
-                    Toast.makeText(mContext, ""+channelInfoBean.getChannel_name(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, ""+channelInfoBean.getChannel_name(), Toast.LENGTH_SHORT).show();
+                    Intent intent= new Intent(mContext, GoodsListActivity.class);
+                    intent.putExtra("position",position);
+                    mContent.startActivity(intent);
 
                 }
             });
